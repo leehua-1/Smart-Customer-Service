@@ -6,6 +6,7 @@ class ChatConfig(AppConfig):
     name = 'chat'
 
     def ready(self):
-        # 预加载检索器，避免首次请求卡顿
         from nlp.retrieve import get_retriever
+        from nlp.intent import get_intent_classifier
         get_retriever()
+        get_intent_classifier()
