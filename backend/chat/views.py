@@ -2,6 +2,7 @@ import uuid
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import ChatLog
+from nlp.retrieve import get_retriever
 
 
 @api_view(['POST'])
@@ -12,8 +13,13 @@ def chat(request):
     if not user_input:
         return Response({'error': '消息不能为空'}, status=400)
 
-    # 当前阶段先返回固定回复，后续接入 NLP 模块后替换
-    reply = f'收到你的消息：{user_input}'
+    retriever = get_retriever()
+    answer = retriever.best_answer(user_input, threshold=0.6)
+
+    if answer:
+        reply = answer
+    else:
+        reply = '抱歉，我没有完全理解您的问题。您可以换个说法，或输入“转人工”联系客服。'
 
     ChatLog.objects.create(
         session_id=session_id,
