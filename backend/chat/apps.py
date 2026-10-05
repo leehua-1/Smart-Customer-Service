@@ -8,5 +8,7 @@ class ChatConfig(AppConfig):
     def ready(self):
         from nlp.retrieve import get_retriever
         from nlp.intent import get_intent_classifier
+        from nlp.emotion import get_emotion_classifier
         get_retriever()
         get_intent_classifier()
+        get_emotion_classifier()
