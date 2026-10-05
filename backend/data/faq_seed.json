@@ -1,0 +1,242 @@
+[
+  {
+    "question": "我买的那个东西到哪了",
+    "answer": "请提供您的订单号，我马上帮您查询物流进度。",
+    "intent": "logistics",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "帮我看看订单现在什么情况",
+    "answer": "请提供订单号，我帮您查看当前订单状态。",
+    "intent": "order_query",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "我前天下的单怎么还没发货",
+    "answer": "请提供订单号，我帮您核实发货情况并催促处理。",
+    "intent": "order_query",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "订单显示签收了但我没收到",
+    "answer": "请提供订单号，我帮您联系物流核实签收情况。",
+    "intent": "logistics",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "查一下我最近一笔订单",
+    "answer": "请提供您的账号或订单号，我帮您查询最近订单。",
+    "intent": "order_query",
+    "entities": ["订单号", "账号"]
+  },
+  {
+    "question": "我想退货怎么弄",
+    "answer": "请提供订单号，我帮您核实是否在退换货期内并指引操作。",
+    "intent": "refund_return",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "买错了能换吗",
+    "answer": "请提供订单号，我帮您确认是否支持换货及具体流程。",
+    "intent": "refund_return",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "退款什么时候能到账",
+    "answer": "退款一般1-7个工作日到账，请提供订单号我帮您查询。",
+    "intent": "refund_return",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "东西有质量问题我要退",
+    "answer": "抱歉给您带来不便，请提供订单号，我帮您申请退换。",
+    "intent": "refund_return",
+    "entities": ["订单号", "产品名"]
+  },
+  {
+    "question": "七天无理由怎么算时间",
+    "answer": "自签收次日起7天内可申请，请提供订单号我帮您核实。",
+    "intent": "refund_return",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "这个材质是什么的",
+    "answer": "请告知具体产品名称或链接，我帮您查询详细材质信息。",
+    "intent": "product_info",
+    "entities": ["产品名"]
+  },
+  {
+    "question": "有没有大一号的",
+    "answer": "请提供产品名称，我帮您查询是否还有更大规格可选。",
+    "intent": "product_info",
+    "entities": ["产品名"]
+  },
+  {
+    "question": "这个和那个有什么区别",
+    "answer": "请告知两款产品名称，我帮您对比参数和适用场景。",
+    "intent": "product_info",
+    "entities": ["产品名"]
+  },
+  {
+    "question": "孕妇能用吗",
+    "answer": "请提供产品名称，我帮您核实成分及适用人群说明。",
+    "intent": "product_info",
+    "entities": ["产品名"]
+  },
+  {
+    "question": "什么时候有货",
+    "answer": "请提供产品名称，我帮您查询库存及预计到货时间。",
+    "intent": "product_info",
+    "entities": ["产品名"]
+  },
+  {
+    "question": "我要投诉你们客服态度太差了",
+    "answer": "非常抱歉给您带来不好体验，请提供订单号，我马上核实处理。",
+    "intent": "complaint",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "你们这什么破服务啊",
+    "answer": "抱歉让您不满意，请说明具体情况，我一定帮您跟进解决。",
+    "intent": "complaint",
+    "entities": []
+  },
+  {
+    "question": "收到的货和描述完全不一样",
+    "answer": "抱歉给您造成困扰，请提供订单号，我帮您核实并处理。",
+    "intent": "complaint",
+    "entities": ["订单号", "产品名"]
+  },
+  {
+    "question": "我要投诉物流太慢了",
+    "answer": "抱歉给您带来不便，请提供订单号，我帮您反馈物流并跟进。",
+    "intent": "complaint",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "你们虚假宣传我要举报",
+    "answer": "非常抱歉，请提供订单号和具体问题，我立即为您核实处理。",
+    "intent": "complaint",
+    "entities": ["订单号", "产品名"]
+  },
+  {
+    "question": "我密码忘了登不上",
+    "answer": "请提供注册手机号，我帮您验证身份后重置密码。",
+    "intent": "account",
+    "entities": ["手机号"]
+  },
+  {
+    "question": "怎么改绑手机号",
+    "answer": "请登录后进入账户设置，按提示验证后即可更换绑定手机号。",
+    "intent": "account",
+    "entities": ["手机号"]
+  },
+  {
+    "question": "我账号怎么被封了",
+    "answer": "请提供账号信息，我帮您核实封禁原因及申诉流程。",
+    "intent": "account",
+    "entities": ["账号"]
+  },
+  {
+    "question": "收不到验证码怎么办",
+    "answer": "请检查短信拦截或稍后重试，仍不行请提供手机号我帮您排查。",
+    "intent": "account",
+    "entities": ["手机号"]
+  },
+  {
+    "question": "怎么注销账号",
+    "answer": "请提供注册手机号，我帮您核实身份后指引注销流程。",
+    "intent": "account",
+    "entities": ["手机号", "账号"]
+  },
+  {
+    "question": "我付了钱怎么显示未支付",
+    "answer": "请提供订单号，我帮您核实支付状态并处理。",
+    "intent": "payment",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "可以用花呗吗",
+    "answer": "具体支付方式以结算页显示为准，请告知订单我帮您确认。",
+    "intent": "payment",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "重复扣款了怎么办",
+    "answer": "抱歉，请提供订单号和支付凭证，我帮您核实并申请退款。",
+    "intent": "payment",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "支付失败是什么原因",
+    "answer": "请提供订单号，我帮您排查支付失败原因并协助重试。",
+    "intent": "payment",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "发票怎么开",
+    "answer": "请提供订单号和抬头信息，我帮您登记开具电子发票。",
+    "intent": "payment",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "我要找人工",
+    "answer": "好的，正在为您转接人工客服，请稍候。",
+    "intent": "human_agent",
+    "entities": []
+  },
+  {
+    "question": "转人工客服",
+    "answer": "正在为您转接人工，请稍等片刻。",
+    "intent": "human_agent",
+    "entities": []
+  },
+  {
+    "question": "机器人别回了我要真人",
+    "answer": "好的，马上为您转接人工客服，请稍候。",
+    "intent": "human_agent",
+    "entities": []
+  },
+  {
+    "question": "有人吗给我转人工",
+    "answer": "在的，正在为您转接人工客服，请稍等。",
+    "intent": "human_agent",
+    "entities": []
+  },
+  {
+    "question": "这个问题你解决不了叫你们主管来",
+    "answer": "好的，我为您转接人工客服进一步处理，请稍候。",
+    "intent": "human_agent",
+    "entities": []
+  },
+  {
+    "question": "我的快递怎么不动了",
+    "answer": "请提供订单号，我帮您查询物流最新状态并催促。",
+    "intent": "logistics",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "能改收货地址吗还没发货",
+    "answer": "请提供订单号和新地址，我帮您尝试修改。",
+    "intent": "logistics",
+    "entities": ["订单号", "收货地址"]
+  },
+  {
+    "question": "快递员电话多少",
+    "answer": "请提供订单号，我帮您查询配送员联系方式。",
+    "intent": "logistics",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "为什么物流信息一直不更新",
+    "answer": "请提供订单号，我帮您联系快递核实并反馈。",
+    "intent": "logistics",
+    "entities": ["订单号"]
+  },
+  {
+    "question": "可以指定时间派送吗",
+    "answer": "请提供订单号，我帮您备注并联系快递协调派送时间。",
+    "intent": "logistics",
+    "entities": ["订单号"]
+  }
+]
