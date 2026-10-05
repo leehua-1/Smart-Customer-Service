@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class FAQ(models.Model):
     question = models.TextField(verbose_name='标准问题')
     answer = models.TextField(verbose_name='标准答案')
@@ -11,6 +12,7 @@ class FAQ(models.Model):
     class Meta:
         db_table = 'faq'
         verbose_name = 'FAQ 知识'
+        verbose_name_plural = 'FAQ 知识'
 
     def __str__(self):
         return self.question[:30]
@@ -22,8 +24,13 @@ class ChatLog(models.Model):
     bot_reply = models.TextField()
     intent = models.CharField(max_length=50, blank=True)
     emotion = models.CharField(max_length=20, blank=True)
+    entities = models.JSONField(default=dict, blank=True, verbose_name='提取实体')   # 新增
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = 'chat_log'
         verbose_name = '对话记录'
+        verbose_name_plural = '对话记录'
+
+    def __str__(self):
+        return f'{self.session_id[:8]} - {self.user_input[:20]}'

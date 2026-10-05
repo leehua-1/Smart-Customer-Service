@@ -51,11 +51,18 @@ class EmotionClassifier:
         self.vectors = self.model.encode(descriptions, normalize_embeddings=True)
         print(f'情感分类器就绪，共 {len(EMOTION_DESCRIPTIONS)} 类情绪')
 
-    def predict(self, query):
+    def predict(self, query, threshold=0.55):
         vec = self.model.encode([query], normalize_embeddings=True)
         scores = np.dot(self.vectors, vec[0])
         best_idx = int(np.argmax(scores))
-        return self.labels[best_idx], float(scores[best_idx])
+        best_score = float(scores[best_idx])
+        best_label = self.labels[best_idx]
+
+        # 置信度太低时归为 neutral
+        if best_score < threshold:
+            return 'neutral', best_score
+
+        return best_label, best_score
 
 
 _emotion_instance = None

@@ -1,3 +1,4 @@
+import os
 from django.apps import AppConfig
 
 
@@ -6,6 +7,11 @@ class ChatConfig(AppConfig):
     name = 'chat'
 
     def ready(self):
+        # 只在 runserver 时预加载，其他命令（migrate、shell 等）跳过
+        import sys
+        if 'runserver' not in sys.argv:
+            return
+
         from nlp.retrieve import get_retriever
         from nlp.intent import get_intent_classifier
         from nlp.emotion import get_emotion_classifier
