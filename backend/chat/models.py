@@ -34,3 +34,21 @@ class ChatLog(models.Model):
 
     def __str__(self):
         return f'{self.session_id[:8]} - {self.user_input[:20]}'
+
+class DialogueState(models.Model):
+    """多轮对话状态，每个 session 一条记录"""
+
+    session_id = models.CharField(max_length=64, unique=True, db_index=True)
+    current_intent = models.CharField(max_length=50, blank=True, verbose_name='当前意图')
+    slots = models.JSONField(default=dict, blank=True, verbose_name='已填槽位')
+    turn_count = models.IntegerField(default=0, verbose_name='对话轮次')
+    last_input = models.TextField(blank=True, verbose_name='上轮输入')
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'dialogue_state'
+        verbose_name = '对话状态'
+        verbose_name_plural = '对话状态'
+
+    def __str__(self):
+        return f'{self.session_id[:8]} - {self.current_intent}'

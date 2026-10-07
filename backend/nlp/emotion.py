@@ -22,8 +22,8 @@ EMOTION_DESCRIPTIONS = {
         '服务很好，解决问题了，点赞',
     ],
     'anger': [
-        '我很生气，非常不满，要投诉',
-        '太差了，什么破服务，气死了',
+        '我要投诉，非常生气，太差了',
+        '什么垃圾服务，气死我了',
     ],
     'confusion': [
         '我不太明白，这是什么意思',
@@ -32,6 +32,7 @@ EMOTION_DESCRIPTIONS = {
     'neutral': [
         '我想咨询一个问题，请问怎么操作',
         '普通的询问，陈述事实',
+        '我要办理业务，咨询信息',
     ],
 }
 
@@ -51,15 +52,17 @@ class EmotionClassifier:
         self.vectors = self.model.encode(descriptions, normalize_embeddings=True)
         print(f'情感分类器就绪，共 {len(EMOTION_DESCRIPTIONS)} 类情绪')
 
-    def predict(self, query, threshold=0.55):
+    def predict(self, query, threshold=0.55, anger_threshold=0.68):
         vec = self.model.encode([query], normalize_embeddings=True)
         scores = np.dot(self.vectors, vec[0])
         best_idx = int(np.argmax(scores))
         best_score = float(scores[best_idx])
         best_label = self.labels[best_idx]
 
-        # 置信度太低时归为 neutral
-        if best_score < threshold:
+        # anger 类需要更高置信度，避免正常业务表达被误判
+        min_score = anger_threshold if best_label == 'anger' else threshold
+
+        if best_score < min_score:
             return 'neutral', best_score
 
         return best_label, best_score
@@ -85,6 +88,8 @@ if __name__ == '__main__':
         '我想问一下订单状态',
         '等了三天还没发货，什么垃圾服务',
         '解决了，非常感谢',
+        '我要退货',           # 新增：测试是否被判为 anger
+        '订单 1234567890123',  # 新增：纯业务输入
     ]
 
     for q in test_queries:
