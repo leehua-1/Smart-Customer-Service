@@ -24,7 +24,8 @@ class ChatLog(models.Model):
     bot_reply = models.TextField()
     intent = models.CharField(max_length=50, blank=True)
     emotion = models.CharField(max_length=20, blank=True)
-    entities = models.JSONField(default=dict, blank=True, verbose_name='提取实体')   # 新增
+    entities = models.JSONField(default=dict, blank=True, verbose_name='提取实体')
+    is_from_human = models.BooleanField(default=False, verbose_name='是否人工回复')   # 新增
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -35,6 +36,7 @@ class ChatLog(models.Model):
     def __str__(self):
         return f'{self.session_id[:8]} - {self.user_input[:20]}'
 
+
 class DialogueState(models.Model):
     """多轮对话状态，每个 session 一条记录"""
 
@@ -43,6 +45,7 @@ class DialogueState(models.Model):
     slots = models.JSONField(default=dict, blank=True, verbose_name='已填槽位')
     turn_count = models.IntegerField(default=0, verbose_name='对话轮次')
     last_input = models.TextField(blank=True, verbose_name='上轮输入')
+    is_human_mode = models.BooleanField(default=False, verbose_name='是否转人工')   # 新增
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
