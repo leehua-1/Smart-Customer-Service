@@ -2,11 +2,12 @@
 多轮对话管理器
 - 维护每个 session 的对话状态
 - 用仲裁器判定意图，槽位填充后追问或执行
-- 支持人工接管（is_human_mode）
+- 支持人工接管（is_human_mode）与主动取消
 """
 
 import sys
 import os
+import re
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -65,6 +66,7 @@ def handle_turn(session_id, user_input):
 
     # ---------- 拦截：当前处于人工模式 ----------
     if state.is_human_mode:
+        # 直接记录用户排队日志，等待后台人工接管
         ChatLog.objects.create(
             session_id=session_id,
             user_input=user_input,
@@ -73,7 +75,8 @@ def handle_turn(session_id, user_input):
             emotion='',
             entities={}
         )
-        return '人工客服正在赶来，请稍等片刻哦~（您正在排队中）', state
+        # 纯净的排队提示，取消动作交由图前端的按钮处理
+        return '人工客服正在赶来，请稍等片刻哦~', state
     # -----------------------------------------
 
     intent_clf = get_intent_classifier()
@@ -118,7 +121,7 @@ def handle_turn(session_id, user_input):
             elif target_slot in FREE_TEXT_SLOTS:
                 state.slots[target_slot] = user_input
         else:
-            # 覆盖已填槽位（P0 修复）
+            # 覆盖已填槽位
             for k, v in entities.items():
                 if k in required:
                     state.slots[k] = v[0] if isinstance(v, list) and v else v
@@ -143,7 +146,6 @@ def _next_reply(state, user_input):
     if missing:
         # 如果追问的是订单号，但用户发了一大段抱怨的话（没数字）
         if missing[0] == 'order_id' and len(user_input) > 8:
-            import re
             if not re.search(r'\d', user_input):
                 return '非常理解您的焦急。为了更快解决您的问题，请提供一下订单号，或者输入“转人工”。'
                 
@@ -178,7 +180,6 @@ def execute_intent(state, user_input=''):
         except KeyError as e:
             return f'处理时缺少信息：{e}'
 
-    # 未定义完成模板的意图，走 FAQ 检索兜底
     from nlp.retrieve import get_retriever
     retriever = get_retriever()
     query = user_input or state.last_input
@@ -190,32 +191,3 @@ def reset_state(session_id):
     """重置会话状态"""
     from chat.models import DialogueState
     DialogueState.objects.filter(session_id=session_id).delete()
-
-
-# ---------- 本地测试 ----------
-if __name__ == '__main__':
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-    import django
-    django.setup()
-
-    def run_scenario(name, session, dialogue):
-        print(f'\n===== {name} =====')
-        reset_state(session)
-        for user_input in dialogue:
-            reply, state = handle_turn(session, user_input)
-            print(f'用户：{user_input}')
-            print(f'AI  ：{reply}')
-            print(f'     [意图={state.current_intent}, 槽位={state.slots}, 轮次={state.turn_count}, 人工模式={state.is_human_mode}]')
-
-    run_scenario('场景 1：完整退货', 'test-1',
-                 ['我要退货', '订单 1234567890123', '不合适'])
-    run_scenario('场景 2：追问取消', 'test-2',
-                 ['我要退货', '我不需要了'])
-    run_scenario('场景 3：订单覆盖', 'test-3',
-                 ['订单 1234567890123 到哪了', '订单 1234567891011'])
-    run_scenario('场景 4：复合表达', 'test-4',
-                 ['订单 1234567890123 到哪了', '太慢了不要了'])
-    
-    # 新增场景：转人工
-    run_scenario('场景 5：转人工拦截', 'test-5',
-                 ['有没有真人客服', '人呢', '快点啊'])

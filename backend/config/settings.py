@@ -63,7 +63,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],  # 关键修改：让 Django 找到根目录的 templates 文件夹
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,9 +118,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'zh-hans'      # 改成简体中文，Admin 后台显示中文
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'Asia/Shanghai'    # 改成中国时区
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -139,19 +139,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # ============================================================
-# CORS 跨域配置（新增）
+# CORS 跨域配置
 # ============================================================
 
-# 允许访问后端的前端源
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
 
-# 允许携带 Cookie（本项目暂不需要，但加上无妨）
 CORS_ALLOW_CREDENTIALS = True
 
-# 允许的请求方法
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -161,7 +158,6 @@ CORS_ALLOW_METHODS = [
     'PUT',
 ]
 
-# 允许的请求头
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',

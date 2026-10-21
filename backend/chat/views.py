@@ -38,9 +38,9 @@ def chat(request):
             reply = prefix + reply
 
     # 4. 记录日志
-    # 如果 handle_turn 里已经为“人工模式拦截”存了日志，这里需要防重
-    # 我们通过一个简单判断：如果回复包含“排队中”，说明上面已经存过，不再重复存
-    if '排队中' not in reply:
+    # 防重判断：如果当前是排队状态，并且回复文本是排队提示，说明 handle_turn 里已经存过日志了
+    is_waiting_reply = state.is_human_mode and '排队' in reply
+    if not is_waiting_reply:
         ChatLog.objects.create(
             session_id=session_id,
             user_input=user_input,
@@ -77,3 +77,22 @@ def poll_messages(request):
     # 倒序排列，保证时间线正确
     replies = [log.bot_reply for log in reversed(logs)]
     return Response({'replies': replies})
+    
+    # 在文件末尾追加取消人工接口
+
+@api_view(['POST'])
+def cancel_human(request):
+    """用户点击按钮取消人工排队"""
+    from .models import DialogueState
+    session_id = request.data.get('session_id')
+    
+    if session_id:
+        state = DialogueState.objects.filter(session_id=session_id).first()
+        if state and state.is_human_mode:
+            state.is_human_mode = False
+            state.current_intent = ''
+            state.slots = {}
+            state.save()
+            return Response({'status': 'ok', 'message': '已取消人工排队，交还给 AI 助手。'})
+    
+    return Response({'status': 'error', 'message': '当前未处于人工状态'})
